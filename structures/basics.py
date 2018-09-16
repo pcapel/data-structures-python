@@ -4,18 +4,18 @@ Some of the basic elemental classes that will be used to make up the more comple
 import operator
 
 
-class StackError(Exception):
-    """Generic exception class for stack errors"""
+class DataError(Exception):
+    """Generic exception class data type errors"""
 
 
-class StackOverflowError(StackError):
-    """I have always wanted to write this error..."""
+class AtCapacityError(DataError):
+    """I really liked calling it a StackOverflowError, but this is more generalizable..."""
     def __init__(self, message):
         self.message = message
 
 
-class StackUnderflowError(StackError):
-    """You done goofed!"""
+class EmptyError(DataError):
+    """For all cases where emptiness applies.  My soul for instance. (jk)"""
     def __init__(self, message):
         self.message = message
 
@@ -88,10 +88,10 @@ class Stack:
         Returns: True, or raises
 
         Raises:
-            StackOverflowError
+            AtCapacityError
         """
         if self._index == self._stack_cap:
-            raise StackOverflowError('The stack is currently at max capacity: {} entries'.format(self.capacity))
+            raise AtCapacityError('The stack is currently at max capacity: {} entries'.format(self.capacity))
         self._elements[self._next_index] = item
         self._update(operator.add, 1)
         return True
@@ -101,11 +101,11 @@ class Stack:
         Return the current top, removing it from the stack
         Returns: The current top value from the stack
         Raises:
-            StackUnderflowError
+            EmptyError
 
         """
         if self.is_empty:
-            raise StackUnderflowError('The stack is empty!')
+            raise EmptyError('The stack is empty!')
         value = self._elements[self._index]
         self._elements[self._index] = None
         self._update(operator.sub, 1)
